@@ -15,17 +15,13 @@ pipeline {
 
         stage('Build WAR') {
             steps {
-                dir('2023MavenWebAppPe') {
-                    sh 'mvn clean package'
-                }
+                sh 'mvn clean package'
             }
         }
 
         stage('Deploy Tomcat') {
             steps {
-                dir('2023MavenWebAppPe') {
-                    sh 'cp target/*.war /opt/tomcat/webapps/'
-                }
+                sh 'cp target/*.war /opt/tomcat/webapps/'
             }
         }
 
