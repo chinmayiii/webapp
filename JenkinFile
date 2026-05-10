@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'YOUR_GITHUB_REPO_URL'
+            }
+        }
+
+        stage('Build WAR') {
+            steps {
+                dir('2023MavenWebAppPe') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Deploy Tomcat') {
+            steps {
+                dir('2023MavenWebAppPe') {
+                    sh 'cp target/*.war /opt/tomcat/webapps/'
+                }
+            }
+        }
+
+        stage('Verify') {
+            steps {
+                sh 'ls /opt/tomcat/webapps'
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'Deployment Successful'
+        }
+
+        failure {
+            echo 'Deployment Failed'
+        }
+    }
+}
